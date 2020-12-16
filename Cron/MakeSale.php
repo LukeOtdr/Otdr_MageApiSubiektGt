@@ -131,7 +131,7 @@ class MakeSale extends CronObject
                                                                              ));
                   }
 
-                  print("OK - Send!");
+                  print("OK - Send!\n");
 
                   if($doc_amount != $order_data->getGrandTotal()){
                      $this->addErrorLog($id_order,"Niezgodność kwoty zamówień: <b style=\"color:red;\">{$result['data']['order_ref']} : {$result['data']['doc_amount']}</b>");
