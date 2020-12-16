@@ -302,7 +302,8 @@ class OrderState extends CronObject
 
                 //Amount collision
                 if(true == $result['is_exists']  && $result['amount'] != $order_data->getGrandTotal()){
-                    $this->addErrorLog($id_order,"Niezgodność kwoty zamówień: <b style=\"color:red;\">{$result['doc_ref']} : {$result['amount']}</b>");
+                    $this->setStatus($id_order,"Niezgodność kwoty zamówień: <b style=\"color:red;\">{$result['doc_ref']} : {$result['amount']}</b>");
+                    //$this->addErrorLog($id_order,"Niezgodność kwoty zamówień: <b style=\"color:red;\">{$result['doc_ref']} : {$result['amount']}</b>");
                 }
 
                 //Document ref collision
@@ -319,7 +320,8 @@ class OrderState extends CronObject
                 elseif($result['is_exists'] == true && $result['order_processing'] == true && $status != $this->subiekt_api_order_processing){
                     $this->setStatus($id_order,'Zamówienie przetwarzane',$this->subiekt_api_order_processing);
                 }elseif($result['amount'] != $order_data->getGrandTotal()){
-                    $this->addErrorLog($id_order,"Niezgodność kwoty zamówień: <b style=\"color:red;\">{$result['order_ref']} : {$result['amount']}</b>");
+                    $this->setStatus($id_order,"Niezgodność kwoty zamówień: <b style=\"color:red;\">{$result['order_ref']} : {$result['amount']}</b>");
+                    //$this->addErrorLog($id_order,"Niezgodność kwoty zamówień: <b style=\"color:red;\">{$result['order_ref']} : {$result['amount']}</b>");
                 }
             }
 
