@@ -41,7 +41,7 @@ class DeleteInventoryReservations implements ObserverInterface
                 "so.increment_id = otdr.id_order
                 AND otdr.gt_order_sent = 1
                 AND otdr.gt_order_ref <> ''
-                AND otdr.upd_date < '{$latestInventoryTimestamp}'",
+                AND otdr.add_date < '{$latestInventoryTimestamp}'",
                 []
             );
 
