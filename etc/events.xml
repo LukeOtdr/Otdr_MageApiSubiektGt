@@ -5,5 +5,9 @@
     </event>
     <event name="sales_order_save_after">
         <observer name="Otdr_MageApiSubiektGt_sales_order_save_after" instance="Otdr\MageApiSubiektGt\Observer\OrderSaver" />
-    </event>    
+    </event>
+    <event name="ageno_inventory_sync_inventory_before_update">
+        <observer name="Otdr_MageApiSubiektGt_ageno_inventory_sync_inventory_before_update"
+                  instance="Otdr\MageApiSubiektGt\Observer\DeleteInventoryReservations"/>
+    </event>
 </config>
