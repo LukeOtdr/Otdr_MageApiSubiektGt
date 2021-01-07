@@ -93,6 +93,7 @@ class OrderState extends CronObject
                 // Send email                
 
                 /* @var $shipmentNotifier \Magento\Shipping\Model\ShipmentNotifier */
+                /*
                 $shipmentNotifier = $objectManager->create('Magento\Shipping\Model\ShipmentNotifier');
 
                 $this->_areaList->getArea(Area::AREA_FRONTEND)->load(Area::PART_TRANSLATE);
@@ -106,7 +107,7 @@ class OrderState extends CronObject
                 );
 
                 $shipment->save();
-
+                */
             } catch (\Exception $e) {
                 echo "Shipment Not Created". $e->getMessage();
                 return false;
