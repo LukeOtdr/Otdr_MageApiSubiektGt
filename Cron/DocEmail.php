@@ -48,6 +48,43 @@ class DocEmail extends CronObject
    }
 
 
+    public function makeShippment($orderObject){
+        if ($orderObject->canShip()) {
+            $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+            // Initialize the order shipment object
+            $convertOrder = $objectManager->create('Magento\Sales\Model\Convert\Order');
+            $shipment = $convertOrder->toShipment($orderObject);
+
+            // Loop through order items
+            foreach ($orderObject->getAllItems() AS $orderItem) {
+                // Check if order item has qty to ship or is virtual
+                if (! $orderItem->getQtyToShip() || $orderItem->getIsVirtual()) {
+                    continue;
+                }
+                $qtyShipped = $orderItem->getQtyToShip();
+                // Create shipment item with qty
+                $shipmentItem = $convertOrder->itemToShipmentItem($orderItem)->setQty($qtyShipped);
+                // Add shipment item to shipment
+                $shipment->addItem($shipmentItem);
+            }
+
+            // Register shipment
+            $shipment->register();
+            $shipment->getOrder()->setIsInProcess(true);
+
+            try {
+                // Save created shipment and order
+                $shipment->save();
+                $shipment->getOrder()->save();
+
+            } catch (\Exception $e) {
+                echo "Shipment Not Created". $e->getMessage();
+                return false;
+            }
+        }
+        return true;
+    }
+
    protected function sendEmail($orderObject){
       $store = $this->_storeManager->getStore()->getId();      
 
@@ -129,6 +166,7 @@ class DocEmail extends CronObject
         
         try{ 
           $this->sendEmail($order_data);
+          $this->makeShippment($order_data);
           $this->updateOrderStatus($id_order);
         }catch(\Exception $e){
           $this->unlockOrder($id_order); 

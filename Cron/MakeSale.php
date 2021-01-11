@@ -129,6 +129,13 @@ class MakeSale extends CronObject
                                                                               'id_gr_flag' => 6,
                                                                               'flag_name'=>$this->subiekt_api_wrapping_flag
                                                                              ));
+                    if($flag_result['state'] == 'fail')
+                    {
+                        $flag_result = $subiektApi->call('document/setflag',array('doc_ref'=>$doc_ref,
+                                                                              'id_gr_flag' => 6,
+                                                                              'flag_name'=>$this->subiekt_api_wrapping_flag
+                                                                             ));
+                    }
                   }
 
                   print("OK - Send!\n");
