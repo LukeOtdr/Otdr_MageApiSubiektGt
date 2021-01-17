@@ -67,13 +67,14 @@ class OrderSend extends CronObject
 
          /* check order status */
          //var_dump($order_data->getStatus());
-         if($order_data->getStatus() == 'closed' || $order_data->getStatus() == 'canceled'){
+         if($order_data->getStatus() == 'canceled'){
              $this->removeFromDb($id_order);
              print("order closed - remove from processing\n");
              continue;
          }
 
-         if($order_data->getStatus() != 'pending' && $order_data->getStatus() != 'pending_payment' && $order_data->getStatus() != 'processing'){
+         $o_status = $order_data->getStatus()
+         if($o_status != 'pending' && $o_status != 'pending_payment' && $o_status != 'processing'){
             $this->unlockOrder($id_order);
             print ("skipped\n");
             continue;

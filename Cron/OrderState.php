@@ -206,8 +206,7 @@ class OrderState extends CronObject
 
                     //Make shippment
                     case $this->subiekt_api_sell_doc_status:
-
-                        if(!$order_data->hasShipments() && !empty($this->subiekt_api_complete_flag)){
+                        if(!empty($this->subiekt_api_complete_flag)){
                             if($result['flag_name'] ==  $this->subiekt_api_complete_flag){
                                 $this->makeShippment($order_data);
                             }
@@ -303,7 +302,7 @@ class OrderState extends CronObject
 
                 //Amount collision
                 if(true == $result['is_exists']  && $result['amount'] != $order_data->getGrandTotal()){
-                    $this->setStatus($id_order,"Niezgodność kwoty zamówień: <b style=\"color:red;\">{$result['doc_ref']} : {$result['amount']}</b>");
+                    $this->setStatus($id_order,"Niezgodność kwoty zamówień: <b style=\"color:red;\">{$result['doc_ref']} : {$result['amount']}</b>",$status);
                     //$this->addErrorLog($id_order,"Niezgodność kwoty zamówień: <b style=\"color:red;\">{$result['doc_ref']} : {$result['amount']}</b>");
                 }
 
@@ -321,7 +320,7 @@ class OrderState extends CronObject
                 elseif($result['is_exists'] == true && $result['order_processing'] == true && $status != $this->subiekt_api_order_processing){
                     $this->setStatus($id_order,'Zamówienie przetwarzane',$this->subiekt_api_order_processing);
                 }elseif($result['amount'] != $order_data->getGrandTotal()){
-                    $this->setStatus($id_order,"Niezgodność kwoty zamówień: <b style=\"color:red;\">{$result['order_ref']} : {$result['amount']}</b>");
+                    $this->setStatus($id_order,"Niezgodność kwoty zamówień: <b style=\"color:red;\">{$result['order_ref']} : {$result['amount']}</b>",$status);
                     //$this->addErrorLog($id_order,"Niezgodność kwoty zamówień: <b style=\"color:red;\">{$result['order_ref']} : {$result['amount']}</b>");
                 }
             }
