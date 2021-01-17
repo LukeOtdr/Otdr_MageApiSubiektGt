@@ -157,7 +157,7 @@ class DocEmail extends CronObject
          
          /* check order status */         
          $st = $order_data->getStatus();
-         if($st != 'complete'){
+         if($st != 'complete' && $st != 'closed'){
             $this->unlockOrder($id_order);
             print ("skipped\n");
             continue;
