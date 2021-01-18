@@ -73,7 +73,7 @@ class OrderSend extends CronObject
              continue;
          }
 
-         $o_status = $order_data->getStatus()
+         $o_status = $order_data->getStatus();
          if($o_status != 'pending' && $o_status != 'pending_payment' && $o_status != 'processing'){
             $this->unlockOrder($id_order);
             print ("skipped\n");
