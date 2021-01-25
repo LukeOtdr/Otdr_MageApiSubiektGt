@@ -25,6 +25,19 @@ class OrderState extends CronObject
         return $result;
     }
 
+    protected function getOrder($id_order)
+    {
+        $connection = $this->resource->getConnection();
+        $tableName = $this->resource->getTableName('otdr_mageapisubiektgt');
+        $query = "SELECT id_order, gt_order_ref,gt_sell_doc_ref,gt_order_sent,gt_sell_doc_request,upd_date FROM {$tableName} WHERE id_order = '{$id_order}' AND is_locked = 0";
+        $result = $connection->fetchAll($query);
+        if(isset($result[0])){
+            return $result[0];
+        }
+        return false;   
+    }
+
+
     public function removeSellDoc($id_order){
         $this->deletePdf($id_order);
         $connection = $this->resource->getConnection();
@@ -125,10 +138,19 @@ class OrderState extends CronObject
         $subiektApi = new SubiektApi($this->api_key,$this->end_point);
         $orders_to_make_sale = $this->getOrdersIds();
 
-        foreach($orders_to_make_sale as $order){
+        foreach($orders_to_make_sale as $o){
+            
+            $this->ordersProcessed++;
+
+            $order = $this->getOrder($o['id_order']);
+            if(!$order){
+                $this->unlockOrder($id_order);
+                print ("skipped - in progress \n");
+                continue;  
+            }
             $id_order = $order['id_order'];
 
-            $this->ordersProcessed++;
+            
 
             /* Locking order for processing */
             $this->lockOrder($id_order);

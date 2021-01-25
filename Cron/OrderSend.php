@@ -97,7 +97,7 @@ class OrderSend extends CronObject
          $order_json[$id_order] = array(
                            'create_product_if_not_exists'    => $this->subiekt_api_newproducts,
                            'amount' =>$payment['amount_ordered'],
-                           'reference' =>  trim($this->subiekt_api_prefix.' '. $id_order),
+                           'reference' =>  trim($this->subiekt_api_prefix.' '.$id_order),
                            'pay_type' => 'transfer',
                            'comments' => trim('Doręczyciel: '.$shipping.(isset($payment['additional_information']['method_title'])?', płatność: '.strip_tags($payment['additional_information']['method_title']):'').". ".$comments)
                            );
