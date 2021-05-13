@@ -86,7 +86,8 @@
                 </field>
 
             </group>
-        <group id="payments" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">    
+        <group id="payments" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0"> 
+        <label>Płatności - Subiekt GT</label>   
                 <field id="subiekt_api_payments_transfer" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Płatności przelewem</label>
                     <comment>Podaj płatności M2 po przecinku które mają być traktowane jako przelew</comment>
@@ -101,7 +102,7 @@
                 </field>  
                 <field id="subiekt_api_payments_credit_subiekt" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Płatności kredytowe/kurierskie</label>
-                    <comment>Podaj id punktów kredytowych z Subiekta dla przesyłki pobraniowej</comment>
+                    <comment>Podaj ID punktów kredytowych z Subiekta dla przesyłki pobraniowej</comment>
                 </field> 
                 <field id="subiekt_api_send_flag" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Flaga "do wysłania"</label>
