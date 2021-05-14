@@ -74,13 +74,14 @@ abstract class CronObject {
       /*Flags*/      
       $this->subiekt_api_wrapping_flag = $this->config->getStatus('subiekt_api_wrapping_flag');
       $this->subiekt_api_complete_flag = $this->config->getStatus('subiekt_api_complete_flag');
-      $this->subiekt_api_send_flag = $this->config->getStatus('subiekt_api_send_flag');
+      
 
       /*payments for order*/
-      $this->subiekt_api_payments_transfer = explode(",",$this->config->getStatus('subiekt_api_payments_transfer'));
-      $this->subiekt_api_payments_cart = explode(",",$this->config->getStatus('subiekt_api_payments_cart'));
-      $this->subiekt_api_payments_cart_subiekt = explode(",",$this->config->getStatus('subiekt_api_payments_cart_subiekt'));
-      $this->subiekt_api_payments_credit_subiekt = explode(",",$this->config->getStatus('subiekt_api_payments_credit_subiekt'));
+      $this->subiekt_api_payments_transfer = explode(",",$this->config->getPayments('subiekt_api_payments_transfer'));
+      $this->subiekt_api_payments_cart = explode(",",$this->config->getPayments('subiekt_api_payments_cart'));
+      $this->subiekt_api_payments_cart_subiekt = explode(",",$this->config->getPayments('subiekt_api_payments_cart_subiekt'));
+      $this->subiekt_api_payments_credit_subiekt = explode(",",$this->config->getPayments('subiekt_api_payments_credit_subiekt'));
+      $this->subiekt_api_send_flag = $this->config->getPayments('subiekt_api_send_flag');
       
    }
 
