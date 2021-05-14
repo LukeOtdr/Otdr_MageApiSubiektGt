@@ -36,7 +36,8 @@ class MakeSale extends CronObject
       $orders_to_make_sale = $this->getOrdersIds();
 
 
-      foreach($orders_to_make_sale as $order){
+      foreach($orders_to_make_sale as $order)
+      {
          $id_order = $order['id_order'];
 
          $this->ordersProcessed++;
@@ -122,24 +123,33 @@ class MakeSale extends CronObject
 
                   //If status OK
                   $this->updateOrderStatus($id_order,$result['data']);
-                  //TODO: ustawić flage Do wysyłki na subiekcie.
+
                   //var_dump($this->subiekt_api_wrapping_flag);
-                  if(!empty($this->subiekt_api_wrapping_flag)){
-                    $flag_result = $subiektApi->call('document/setflag',array('doc_ref'=>$doc_ref,
-                                                                              'id_gr_flag' => 6,
-                                                                              'flag_name'=>$this->subiekt_api_wrapping_flag
-                                                                             ));
-                    if($flag_result['state'] == 'fail')
-                    {
+                  $default_wrapping_flag = true;
+                  if(!empty($this->subiekt_api_send_flag))
+                  {
+                     $order_state_result = $subiektApi->call('order/getstate',array('order_ref'=>$order['gt_order_ref']));                     
+                     if($order_state_result['data']['flag_txt'] == $this->subiekt_api_send_flag)
+                     {
                         $flag_result = $subiektApi->call('document/setflag',array('doc_ref'=>$doc_ref,
-                                                                              'id_gr_flag' => 6,
-                                                                              'flag_name'=>$this->subiekt_api_wrapping_flag
-                                                                             ));
-                    }
+                                                      'id_gr_flag' => 6,
+                                                      'flag_name'=>$this->subiekt_api_send_flag
+                                                     ));                        
+                        $default_wrapping_flag = false;
+                     }
+                  }
+
+                  if(!empty($this->subiekt_api_wrapping_flag) && true == $default_wrapping_flag)
+                  {                        
+                        $flag_result = $subiektApi->call('document/setflag',array('doc_ref'=>$doc_ref,
+                                                                                 'id_gr_flag' => 6,
+                                                                                 'flag_name'=>$this->subiekt_api_wrapping_flag
+                                                                                ));
+
                   }
 
                   print("OK - Send!\n");
-
+                  break;
                   if($doc_amount != $order_data->getGrandTotal()){
                      $this->addErrorLog($id_order,"Niezgodność kwoty zamówień: <b style=\"color:red;\">{$result['data']['order_ref']} : {$result['data']['doc_amount']}</b>");
                      print(" Warning: amount collision");
