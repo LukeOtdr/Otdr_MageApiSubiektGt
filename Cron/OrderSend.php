@@ -108,7 +108,7 @@ class OrderSend extends CronObject
          {
             $pay_type = 'transfer';
             $pay_point_id = 0;
-            $to_send_flag = 0;
+            $to_send_flag = 1;
 
          }elseif(false !== ($id = array_search($pay_method, $this->subiekt_api_payments_cart)))
          {
@@ -145,7 +145,7 @@ class OrderSend extends CronObject
                                                       'city'         => $customer['city'],
                                                       'post_code'    => $customer['postcode'],
                                                       'phone'        => $customer['telephone'],
-                                                      'ref_id'       => trim($this->subiekt_api_prefix.'CS '.$customer['entity_id'].'-'.$id_order),
+                                                      'ref_id'       => trim($this->subiekt_api_prefix.'CS '.hrtime(true)),
                                                       'is_company'   => strlen($customer['vat_id'])>0?true:false,
                                                       'company_name' => $customer['company'],
                                                       'tax_id'       => preg_match("/([A-Z]{0,2})([^Aa-zA][0-9\- ]{9,14})/",$customer['vat_id'])==1?$customer['vat_id']:'',
@@ -225,9 +225,9 @@ class OrderSend extends CronObject
                                                                               'id_gr_flag' => $id_gr_flag, //Czy to wlasciwe ID ?
                                                                               'flag_name'=>$this->subiekt_api_send_flag
                                                                              ));
-
+                  //print_r($flag_result);
                   }
-                  print_r($flag_result);
+                  
 
          /* unlocking order after processing */
          $this->unlockOrder($id_order);
