@@ -29,6 +29,14 @@ abstract class CronObject {
    /*Flags*/
    protected $subiekt_api_wrapping_flag = 0;
    protected $subiekt_api_complete_flag = 0;
+   protected $subiekt_api_send_flag = '';
+
+   /*payments for order*/
+   protected $subiekt_api_payments_transfer = [];
+   protected $subiekt_api_payments_cart = [];
+   protected $subiekt_api_payments_cart_subiekt = [];
+   protected $subiekt_api_payments_credit_subiekt = [];
+   
 
    
    protected $resource = false;
@@ -66,8 +74,14 @@ abstract class CronObject {
       /*Flags*/      
       $this->subiekt_api_wrapping_flag = $this->config->getStatus('subiekt_api_wrapping_flag');
       $this->subiekt_api_complete_flag = $this->config->getStatus('subiekt_api_complete_flag');
+      
 
-
+      /*payments for order*/
+      $this->subiekt_api_payments_transfer = explode(",",$this->config->getPayments('subiekt_api_payments_transfer'));
+      $this->subiekt_api_payments_cart = explode(",",$this->config->getPayments('subiekt_api_payments_cart'));
+      $this->subiekt_api_payments_cart_subiekt = explode(",",$this->config->getPayments('subiekt_api_payments_cart_subiekt'));
+      $this->subiekt_api_payments_credit_subiekt = explode(",",$this->config->getPayments('subiekt_api_payments_credit_subiekt'));
+      $this->subiekt_api_send_flag = $this->config->getPayments('subiekt_api_send_flag');
       
    }
 

@@ -76,16 +76,40 @@
                      <comment>Zmień na status gdy wystąpi błąd w komunikacji lub danych zamówienia.</comment>
                      <source_model>Magento\Sales\Model\ResourceModel\Order\Status\Collection</source_model>
                 </field>
-        <field id="subiekt_api_wrapping_flag" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="subiekt_api_wrapping_flag" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Flaga do spakowania</label>
                     <comment>Nazwa flagi SubiektaGT oznaczającą przekazanie zamówienia do spakowania</comment>
                 </field>
- <field id="subiekt_api_complete_flag" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="subiekt_api_complete_flag" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Flaga zrealizowane</label>
                     <comment>Nazwa flagi SubiektaGT oznaczającą, że zamówienie zostało zrealizowane</comment>
                 </field>
 
             </group>
+        <group id="payments" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0"> 
+        <label>Płatności - Subiekt GT</label>   
+                <field id="subiekt_api_payments_transfer" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Płatności przelewem</label>
+                    <comment>Podaj płatności M2 po przecinku które mają być traktowane jako przelew</comment>
+                </field>    
+                <field id="subiekt_api_payments_cart" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Płatności bramki</label>
+                    <comment>Podaj płatności M2 po przecinku które mają być traktowane płatności on-line</comment>
+                </field>
+                <field id="subiekt_api_payments_cart_subiekt" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Płatności bramki SubiektGT</label>
+                    <comment>Podaj ID płatności Subiekta po przecinku które mają być traktowane płatności kredytowe</comment>
+                </field>  
+                <field id="subiekt_api_payments_credit_subiekt" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Płatności kredytowe/kurierskie</label>
+                    <comment>Podaj ID punktów kredytowych z Subiekta dla przesyłki pobraniowej</comment>
+                </field> 
+                <field id="subiekt_api_send_flag" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Flaga "do wysłania"</label>
+                    <comment>Nazwa flagi SubiektaGT oznaczającą, automatyczną realziacje zamówień</comment>
+                </field>                                  
+
+        </group>
         <group id="internal" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
         <label>Parametry wewnętrzne</label>
          <field id="last_order_date" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">

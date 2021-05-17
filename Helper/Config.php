@@ -37,6 +37,11 @@ class Config
 
 	}
 
+	public function getPayments($code){
+		return $this->getConfigValue(self::XML_PATH .'payments/'. $code);
+
+	}
+
 	public function get($code){		
 		return $this->getConfigValue(self::XML_PATH . $code);
 	}
