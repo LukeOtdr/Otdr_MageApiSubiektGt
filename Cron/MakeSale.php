@@ -135,7 +135,11 @@ class MakeSale extends CronObject
                                                       'id_gr_flag' => 6,
                                                       'flag_name'=>$this->subiekt_api_send_flag
                                                      ));                        
-                        $default_wrapping_flag = false;
+                        
+                        if($flag_result['data']['flag_name'] == $this->subiekt_api_send_flag)
+                        {
+                           $default_wrapping_flag = false;
+                        }
                      }
                   }
 

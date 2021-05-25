@@ -21,6 +21,18 @@ class OrderSend extends CronObject
          return $result;
    }
 
+   protected function getOrder($id_order)
+   {
+        $connection = $this->resource->getConnection();
+        $tableName = $this->resource->getTableName('otdr_mageapisubiektgt');
+        $query = "SELECT id_order, gt_order_ref,gt_sell_doc_ref,gt_order_sent,gt_sell_doc_request,upd_date FROM {$tableName} WHERE id_order = '{$id_order}' AND is_locked = 0";
+        $result = $connection->fetchAll($query);
+        if(isset($result[0])){
+            return $result[0];
+        }
+        return false;   
+   }
+
    protected function updateOrderStatus($id_order,$order_reference){
       $connection = $this->resource->getConnection();
       $tableName = $this->resource->getTableName('otdr_mageapisubiektgt');
@@ -48,6 +60,15 @@ class OrderSend extends CronObject
       $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
       $orders_to_send = $this->getOrdersIds();
       foreach($orders_to_send as $order){
+
+         $order = $this->getOrder($order['id_order']);
+         if(!$order){
+               $this->unlockOrder($id_order);
+               print ("skipped - in progress \n");
+               continue;  
+         }
+         
+
          $id_order = $order['id_order'];
 
          $this->ordersProcessed++;
@@ -104,6 +125,7 @@ class OrderSend extends CronObject
          $pay_point_id = 0;
          $to_send_flag = 0;
 
+         
          if(false !== ($id = array_search($pay_method,$this->subiekt_api_payments_transfer)))
          {
             $pay_type = 'transfer';
@@ -114,11 +136,11 @@ class OrderSend extends CronObject
          {
              $pay_type = 'cart';
              $pay_point_id = $this->subiekt_api_payments_cart_subiekt[$id];
-             $to_send_flag = 1;
+             $to_send_flag = 1;             
 
          }elseif($pay_method == 'cashondelivery')
          {
-
+            $pay_type = 'loan';
 
          }
          //------END---------------- Payments setting
@@ -135,6 +157,7 @@ class OrderSend extends CronObject
 
 
          /* Bulding customer array */
+         $cs_id = $randNumber = date("YmdHis").rand(11111,99999);
          $customer = $order_data->getBillingAddress()->getData();
          $order_json[$id_order]['customer'] = array(
                                                       'firstname'    => $customer['firstname'],
@@ -145,7 +168,7 @@ class OrderSend extends CronObject
                                                       'city'         => $customer['city'],
                                                       'post_code'    => $customer['postcode'],
                                                       'phone'        => $customer['telephone'],
-                                                      'ref_id'       => trim($this->subiekt_api_prefix.'CS '.hrtime(true)),
+                                                      'ref_id'       => $cs_id , //trim($this->subiekt_api_prefix.'CS '.hrtime(true)),
                                                       'is_company'   => strlen($customer['vat_id'])>0?true:false,
                                                       'company_name' => $customer['company'],
                                                       'tax_id'       => preg_match("/([A-Z]{0,2})([^Aa-zA][0-9\- ]{9,14})/",$customer['vat_id'])==1?$customer['vat_id']:'',
@@ -220,7 +243,7 @@ class OrderSend extends CronObject
           if(!empty($this->subiekt_api_send_flag) && $to_send_flag == 1){
 
                   $id_gr_flag = 8;
-                  print_r($this->subiekt_api_send_flag);
+                  
                   $flag_result = $subiektApi->call('order/setflag',array('order_ref'=>$result['data']['order_ref'],
                                                                               'id_gr_flag' => $id_gr_flag, //Czy to wlasciwe ID ?
                                                                               'flag_name'=>$this->subiekt_api_send_flag
