@@ -87,7 +87,7 @@ class OrderSend extends CronObject
 
          /* check order status */
          //var_dump($order_data->getStatus());
-         if($order_data->getStatus() == 'canceled'){
+         if($order_data->getStatus() == 'canceled' || $order_data->getStatus() == 'closed'){
              $this->removeFromDb($id_order);
              print("order closed - remove from processing\n");
              continue;
@@ -169,7 +169,7 @@ class OrderSend extends CronObject
                                                       'post_code'    => $customer['postcode'],
                                                       'phone'        => $customer['telephone'],
                                                       'ref_id'       => $cs_id , //trim($this->subiekt_api_prefix.'CS '.hrtime(true)),
-                                                      'is_company'   => strlen($customer['vat_id'])>0?true:false,
+                                                      'is_company'   => preg_match("/([A-Z]{0,2})([^Aa-zA][0-9\- ]{9,14})/",$customer['vat_id'])==1?true:false,
                                                       'company_name' => $customer['company'],
                                                       'tax_id'       => preg_match("/([A-Z]{0,2})([^Aa-zA][0-9\- ]{9,14})/",$customer['vat_id'])==1?$customer['vat_id']:'',
                                              );
