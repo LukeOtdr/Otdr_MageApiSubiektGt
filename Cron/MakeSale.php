@@ -82,7 +82,7 @@ class MakeSale extends CronObject
 
          if(!$result){
             $this->unlockOrder($id_order);
-            $this->addErrorLog($id_order,'Can\'t connect to API check configuration!');
+            $this->addLog($id_order,'Can\'t connect to API check configuration!');
             return false;
 
          }
@@ -97,7 +97,7 @@ class MakeSale extends CronObject
          }
 
          /* unlocking order after processing */
-         $this->unlockOrder($id_order);
+         //$this->unlockOrder($id_order);
 
          $doc_state = $result['data']['doc_state'];
          $state_code = $result['data']['doc_state_code'];
@@ -129,7 +129,7 @@ class MakeSale extends CronObject
                   if(!empty($this->subiekt_api_send_flag))
                   {
                      $order_state_result = $subiektApi->call('order/getstate',array('order_ref'=>$order['gt_order_ref']));                     
-                     if($order_state_result['data']['flag_txt'] == $this->subiekt_api_send_flag)
+                     if(isset($order_state_result['data']['flag_txt']) && $order_state_result['data']['flag_txt'] == $this->subiekt_api_send_flag)
                      {
                         $flag_result = $subiektApi->call('document/setflag',array('doc_ref'=>$doc_ref,
                                                       'id_gr_flag' => 6,

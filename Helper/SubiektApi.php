@@ -40,6 +40,7 @@ class SubiektApi
             curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
             curl_setopt($ch, CURLOPT_USERAGENT, 'PHP-SUBIEKT-API/1.0');       
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
             curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $this->verify_ssl);
@@ -58,7 +59,7 @@ class SubiektApi
                     'method'           => 'POST',
                     'header'           => "Content-type: application/json\r\n".
                                           "Connection: close\r\n" .
-                                          "Content-length: " . strlen($request_data) . "\r\n",
+                                          "Content-length: " . strlen($json_data) . "\r\n",
                     'content'          => $json_data,
                 ),
             )));
