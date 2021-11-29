@@ -178,7 +178,7 @@ class OrderState extends CronObject
 
             if(!$result){
                 $this->unlockOrder($id_order);
-                $this->addErrorLog($id_order,'Can\'t connect to API check configuration!');
+                $this->addLog($id_order,'Can\'t connect to API check configuration!');
                 return false;
 
             }
