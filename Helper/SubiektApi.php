@@ -26,7 +26,7 @@ class SubiektApi
     /**
      * Performs the underlying HTTP request. Not very exciting
      */
-    private function makeRequest($method, $args=array(),$debug = false, $timeout = 60){      
+    private function makeRequest($method, $args=array(),$debug = false, $timeout = 120){      
         $request_data['api_key'] = $this->api_key;
         $request_data['data'] = $args;
         $url = $this->api_endpoint.'/'.$method;
