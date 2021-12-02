@@ -67,8 +67,8 @@ class DocPDF extends CronObject
          
          if(!$result){             
             $this->unlockOrder($id_order);
-            $this->addErrorLog($id_order,'Can\'t connect to API check configuration!');
-            return false;
+            $this->addLog($id_order,'Can\'t connect to API check configuration!');
+            continue;
 
          }
          if($result['state'] == 'fail'){                        

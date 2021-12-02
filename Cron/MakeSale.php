@@ -60,7 +60,7 @@ class MakeSale extends CronObject
          //var_dump($order_data->getStatus());
          $st = $order_data->getStatus();
          if($st != $this->subiekt_api_order_status
-               && $st!=$this->subiekt_api_order_processing
+               && $st!=$this->subiekt_api_order_processing               
                && $st != 'processing'){
             $this->unlockOrder($id_order);
             print ("skipped\n");
@@ -83,7 +83,7 @@ class MakeSale extends CronObject
          if(!$result){
             $this->unlockOrder($id_order);
             $this->addLog($id_order,'Can\'t connect to API check configuration!');
-            return false;
+            continue;
 
          }
          if($result['state'] == 'fail'){
