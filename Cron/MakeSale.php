@@ -59,7 +59,7 @@ class MakeSale extends CronObject
          /* check order status */
          //var_dump($order_data->getStatus());
          $st = $order_data->getStatus();
-         if($st != $this->subiekt_api_sell_doc_status
+         if($st != $this->subiekt_api_order_status
                && $st!=$this->subiekt_api_order_processing               
                && $st != 'processing'){
             $this->unlockOrder($id_order);
