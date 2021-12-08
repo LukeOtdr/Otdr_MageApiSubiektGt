@@ -144,12 +144,11 @@ class OrderState extends CronObject
 
             $order = $this->getOrder($o['id_order']);
             if(!$order){
-                $this->unlockOrder($id_order);
+                $this->unlockOrder($o['id_order']);
                 print ("skipped - in progress \n");
                 continue;  
             }
             $id_order = $order['id_order'];
-
             
 
             /* Locking order for processing */
@@ -286,6 +285,7 @@ class OrderState extends CronObject
                             }
 
                         }
+                        
                         $continue  = true;
 
                         break;
@@ -296,18 +296,13 @@ class OrderState extends CronObject
                         }
                         break;
 
-                    case 'complete':
-                        if($order['gt_sell_doc_request'] == 0){
-                            if($result['state'] == 8 && !empty($result['sell_doc'])){
-                                $this->updateSellDoc($id_order,$result['sell_doc']);
-                            }
-                        }
-
-
-                        break;
-
-
                     default: break;
+                }
+
+                if($order['gt_sell_doc_request'] == 0){
+                    if($result['state'] == 8 && !empty($result['sell_doc'])){
+                        $this->updateSellDoc($id_order,$result['sell_doc']);
+                    }
                 }
 
             }
