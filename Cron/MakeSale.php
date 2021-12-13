@@ -75,7 +75,7 @@ class MakeSale extends CronObject
          }
 
 
-         $order_json[$id_order] = array('order_ref'=>$order['gt_order_ref'],'pdf_request'=>true);
+         $order_json[$id_order] = array('order_ref'=>$order['gt_order_ref'],'pdf_request'=>false);
 
 
          $result = $subiektApi->call('order/makesaledoc',$order_json[$id_order]);
