@@ -144,7 +144,7 @@ class OrderState extends CronObject
 
             $order = $this->getOrder($o['id_order']);
             if(!$order){
-                $this->unlockOrder($o['id_order']);
+                //$this->unlockOrder($o['id_order']);
                 print ("skipped - in progress \n");
                 continue;  
             }

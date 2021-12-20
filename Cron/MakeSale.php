@@ -20,6 +20,18 @@ class MakeSale extends CronObject
          return $result;
    }
 
+   protected function getOrder($id_order)
+   {
+       $connection = $this->resource->getConnection();
+       $tableName = $this->resource->getTableName('otdr_mageapisubiektgt');
+       $query = "SELECT id_order, gt_order_ref,gt_sell_doc_ref,gt_order_sent,gt_sell_doc_request,upd_date FROM {$tableName} WHERE id_order = '{$id_order}' AND is_locked = 0";
+       $result = $connection->fetchAll($query);
+       if(isset($result[0])){
+           return $result[0];
+       }
+       return false;   
+   }
+
    protected function updateOrderStatus($id_order,$order_reference){
       $connection = $this->resource->getConnection();
       $tableName = $this->resource->getTableName('otdr_mageapisubiektgt');
@@ -36,23 +48,22 @@ class MakeSale extends CronObject
       $orders_to_make_sale = $this->getOrdersIds();
 
 
-      foreach($orders_to_make_sale as $order)
-      {
-         $id_order = $order['id_order'];
-
+      foreach($orders_to_make_sale as $o){
+            
          $this->ordersProcessed++;
-         print("Making doc for order no \"{$order['id_order']}\": ");
 
-
-         //checking is processed by another
-         if(true == intval($this->getProcessingData($id_order,'gt_sell_doc_request'))){
-            print("skipped - processed\n");
-            continue;
+         $order = $this->getOrder($o['id_order']);
+         if(!$order){             
+             print ("skipped - in progress \n");
+             continue;  
          }
-
+         $id_order = $order['id_order'];
          /* Locking order for processing */
          $this->lockOrder($id_order);
          /*getting order data*/
+
+         print("\nMaking doc for order no \"{$id_order}\": ");
+  
 
          $order_data = $this->getOrderData($id_order);
 
@@ -63,14 +74,14 @@ class MakeSale extends CronObject
                && $st!=$this->subiekt_api_order_processing               
                && $st != 'processing'){
             $this->unlockOrder($id_order);
-            print ("skipped\n");
+            print ("skipped");
             continue;
          }
 
          //Magento order have shipping or invoice status ?
          if(!$order_data->hasInvoices() && !$order_data->hasShipments()){
              $this->unlockOrder($id_order);
-             print ("skipped no invoice or shippment\n");
+             print ("skipped no invoice or shippment");
              continue;
          }
 
@@ -152,7 +163,7 @@ class MakeSale extends CronObject
 
                   }
 
-                  print("OK - Send!\n");
+                  print("OK - Send!");
                   break;
                   if($doc_amount != $order_data->getGrandTotal()){
                      $this->addErrorLog($id_order,"Niezgodność kwoty zamówień: <b style=\"color:red;\">{$result['data']['order_ref']} : {$result['data']['doc_amount']}</b>");
@@ -168,7 +179,7 @@ class MakeSale extends CronObject
 
          $this->unlockOrder($id_order);
       }
-
+      print("\n");
       return true;
 
 	}
