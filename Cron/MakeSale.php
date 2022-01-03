@@ -24,7 +24,7 @@ class MakeSale extends CronObject
    {
        $connection = $this->resource->getConnection();
        $tableName = $this->resource->getTableName('otdr_mageapisubiektgt');
-       $query = "SELECT id_order, gt_order_ref,gt_sell_doc_ref,gt_order_sent,gt_sell_doc_request,upd_date FROM {$tableName} WHERE id_order = '{$id_order}' AND is_locked = 0";
+       $query = "SELECT id_order, gt_order_ref,gt_sell_doc_ref,gt_order_sent,gt_sell_doc_request,upd_date FROM {$tableName} WHERE id_order = '{$id_order}' AND gt_sell_doc_request = 0";
        $result = $connection->fetchAll($query);
        if(isset($result[0])){
            return $result[0];
@@ -86,7 +86,7 @@ class MakeSale extends CronObject
          }
 
 
-         $order_json[$id_order] = array('order_ref'=>$order['gt_order_ref'],'pdf_request'=>false);
+         $order_json[$id_order] = array('order_ref'=>$order['gt_order_ref']);
 
 
          $result = $subiektApi->call('order/makesaledoc',$order_json[$id_order]);
