@@ -105,6 +105,7 @@ class OrderSend extends CronObject
          /* Bulding order array */
          $payment = $order_data->getPayment()->getData();
          $shipping = $order_data->getShippingDescription();
+         $eko_packing = $order_data->getEkoPacking();         
          $comments_list =  $order_data->getAllStatusHistory();
          $comments = array();
          foreach($comments_list as $comment){
@@ -151,7 +152,7 @@ class OrderSend extends CronObject
                            'reference' =>  trim($this->subiekt_api_prefix.' '.$id_order),
                            'pay_type' => $pay_type,
                            'pay_point_id' => $pay_point_id,
-                           'comments' => trim('Doręczyciel: '.$shipping.(isset($payment['additional_information']['method_title'])?', płatność: '.strip_tags($payment['additional_information']['method_title']):'').". ".$comments)
+                           'comments' => trim(($eko_packing==1?"Eko paczka!, ":"").'Doręczyciel: '.$shipping.(isset($payment['additional_information']['method_title'])?', płatność: '.strip_tags($payment['additional_information']['method_title']):'').". ".$comments)
                            );
 
 
