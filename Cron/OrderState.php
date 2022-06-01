@@ -183,7 +183,7 @@ class OrderState extends CronObject
             }
             if($result['state'] == 'fail'){
                 $this->unlockOrder($id_order);
-                if(!mb_ereg_match(".*Lock request time out period exceeded.",$result['message']))
+                if(!mb_ereg_match(".*Lock request time out period exceeded.",$result['message']) && !mb_ereg_match(".*zablokowany przez operatora",$result['message']))
                 {
                     $this->addErrorLog($id_order,$result['message']);    
                 }
@@ -200,22 +200,28 @@ class OrderState extends CronObject
             if($order['gt_order_sent'] == 1 && $order['gt_sell_doc_request'] == 1){
                 switch($status){
                     //delete order/document from subiekt
+                    
                     case 'canceled':
-                        if($result['fiscal_state'] == false){
+                        /*if($result['fiscal_state'] == false){
                             if(false !== $subiektApi->call('document/delete',array('doc_ref'=>$order['gt_sell_doc_ref'])) &&  false !==  $subiektApi->call('order/delete',array('order_ref'=>$order['gt_order_ref']))){
                                 $this->removeFromDb($id_order);
                                 $continue  = true;
                             }
-                        }
+                        }*/
+                            $this->removeFromDb($id_order);
+                            $continue  = true;
                         break;
                     case 'closed':
-                        if($result['fiscal_state'] == false){
+                        /*if($result['fiscal_state'] == false){
                             if(false !== $subiektApi->call('document/delete',array('doc_ref'=>$order['gt_sell_doc_ref'])) &&  false !==  $subiektApi->call('order/delete',array('order_ref'=>$order['gt_order_ref']))){
                                 $this->removeFromDb($id_order);
                                 $continue  = true;
                             }
-                        }
+                        }*/
+                            $this->removeFromDb($id_order);
+                            $continue  = true;
                         break;
+                    
                     case 'complete':
                         if(!$order_data->hasShipments() && !empty($this->subiekt_api_complete_flag)){
                             if($result['flag_name'] ==  $this->subiekt_api_complete_flag){
@@ -242,6 +248,7 @@ class OrderState extends CronObject
 
                 switch($status){
                     //delete order from subiekt
+                   
                     case 'canceled':
                         if(false !== $subiektApi->call('order/delete',array('order_ref'=>$order['gt_order_ref']))){
                             $this->removeFromDb($id_order);
@@ -254,6 +261,7 @@ class OrderState extends CronObject
                             $continue  = true;
                         }
                         break;
+                    
                     //order processing ...
                     case $this->subiekt_api_order_processing :
                         if($result['state'] == 7 && $result['order_processing']==true){
